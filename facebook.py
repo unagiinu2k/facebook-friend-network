@@ -4,6 +4,7 @@ import pickle
 from tqdm import tqdm
 from dotenv import load_dotenv
 import os
+import pandas as pd
 
 # Some utilities:
 def get_name(link):
@@ -47,6 +48,11 @@ with open("friend_links", "wb") as file:
 print("'friend_links' saved")
 
 
+with open('friend_links', 'rb') as handle:
+    friend_links = pickle.load(handle)
+
+
+
 # Part 2: Getting mutual friends lists
 mutuals = {}
 
@@ -70,16 +76,26 @@ with open("mutuals", "wb") as f:
     pickle.dump(mutuals, f)
 print("'mutuals' saved")
 
+with open('mutuals', 'rb') as handle:
+    mutuals = pickle.load(handle)
+
+
 # Part 3: Getting csv
 
 # Anyone without a facebook username will be listed as "www.facebook.com"
 # So we need to delete those entries
 del mutuals["www.facebook.com"]
 
+# to data frame
+#tmp =  pd.DataFrame.from_dict(mutuals)
+two_column_df = pd.concat(
+     [pd.DataFrame({'Source':k , 'Target':v})for k,v in mutuals.items()]
+    )
+two_column_df.to_pickle('two_column_df.pkl')
 # csv_out will be our csv string we write to file
 csv_out = ""
 
-for friend in tqdm(mutuals.keys()):
+for friend in tqdm(mutuals.keysco()):
     # Append friend name, followed by their mutual friends names.
     # As long as their mutual friend is not called "www.facebook.com".
     mutuals[friend].insert(0, friend)
