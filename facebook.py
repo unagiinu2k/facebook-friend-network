@@ -91,6 +91,7 @@ del mutuals["www.facebook.com"]
 two_column_df = pd.concat(
      [pd.DataFrame({'Source':k , 'Target':v})for k,v in mutuals.items()]
     )
+two_column_df.to_csv('two_column_df.tsv', sep = '\t')
 two_column_df.to_pickle('two_column_df.pkl')
 # csv_out will be our csv string we write to file
 csv_out = ""
